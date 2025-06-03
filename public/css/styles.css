@@ -1,100 +1,168 @@
-/******* Change Box Model ***************/
+/******* Base Styles *******/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
 }
 
-.top-nav {
-  font-family: 'Roboto', sans-serif;
+* {
+  padding: 0;
+  margin: 0;
 }
 
-.siteName, #tools {
-  font-family: 'Oswald', sans-serif;
+:root {
+  --clr-light1: #ffffff;
+  --clr-light2: #F3E9D2;
+  --clr-light3: #ffdcac;
+  --clr-medium1: #F49E4C;
+  --clr-medium2: #1d87e3;
+  --clr-dark1: #003366;
+  --clr-dark2: #003366;
+  --clr-button1: var(--clr-medium1);
+  --clr-button2: #f68924;
+  --clr-button3: #fabf88;
+
+  --font-heading: "Noto Serif", serif;
+  --font-paragraph: "Roboto", sans-serif;
+  
+  font-size: 16px;
 }
 
-h1, h2, h3 {
-  font-family: 'Oswald', sans-serif;
+body {
+  font-family: var(--font-paragraph);
+  line-height: 1.6;
+  color: var(--clr-dark1);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: url("/images/site/small_check.jpg");
 }
 
-.herolabel {
-  font-family: 'Roboto', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--clr-dark2);
+  margin-bottom: 1rem;
 }
 
-.herolabel button {
-  font-family: 'Roboto', sans-serif;
+h1 {
+  font-size: 2rem;
 }
 
-.reviews-upgrades {
-  font-family: 'Roboto', sans-serif;
+p {
+  margin-bottom: 1rem;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Layout */
+#wrapper {
+  background-color: var(--clr-light1);
+  width: 95%;
+  max-width: 1200px;
+  margin: 1rem auto;
+  padding: 1rem;
+  flex: 1;
+  border: 5px ridge var(--clr-medium2);
+}
+
+/* Header */
 #top-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--clr-medium2);
+}
+
+.siteName {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .siteName a {
   text-decoration: none;
-  color: #000;
-  font-size: 40px;
+  color: var(--clr-dark1);
+}
+
+#tools {
+  text-align: right;
 }
 
 #tools a {
   text-decoration: none;
-  color: #000;
-  font-size: 20px;
+  color: var(--clr-dark1);
+  font-size: 1rem;
 }
 
+/* Navigation */
 nav {
-  background-color: #013648;
-  padding: 5px;
+  background-color: var(--clr-dark2);
+  padding: 0.5rem 0;
 }
 
 nav ul {
   display: flex;
-  justify-content: space-between;
-  padding: 1em;
+  justify-content: center;
+  padding: 0;
   margin: 0;
-  text-decoration: none;
 }
 
 nav li {
+  padding: 0.5rem 1rem;
   list-style: none;
-  font-size: 20px;
-  font-weight: 500;
 }
 
 nav a {
-  color: #81b1ce;
+  color: var(--clr-light1);
+  font-weight: 500;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
-  color: #aad6ec;
+  color: var(--clr-light3);
 }
 
-/** Home Page **/
+/* Main Content */
+main {
+  padding: 2rem 0;
+}
 
+/* Hero Section */
 .hero {
-  width: 100%;
   position: relative;
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 .hero img {
   width: 100%;
-  height: 100%;
-  display: block;
+  height: auto;
+  object-fit: cover;
 }
 
 .herolabel {
   position: absolute;
   top: 20%;
   left: 10%;
-  background: #ffffff80;
-  color: #000547;
-  border: 1px solid rgba(0, 0, 0, .75);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--clr-dark2);
+  border: 1px solid rgba(0, 0, 0, 0.75);
   padding: 1.5rem;
   box-shadow: 0 0 3rem #fff;
   text-align: center;
@@ -102,74 +170,27 @@ nav a:hover {
 }
 
 .herolabel h2 {
-  font-size: 30px;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .herolabel p {
   margin: 0;
-  padding: .25rem;
+  padding: 0.25rem;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
 }
 
-.herolabel button {
-  font-size: 20px;
-  cursor: pointer;
-  display: inline-block;
-}
-
-@media (max-width: 1200px) {
-  .herolabel {
-    top: 20%;
-    left: 5%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    max-width: 400px;
-  }
-
-  .herolabel h2 {
-    font-size: 25px;
-  }
-
-  .herolabel p {
-    font-size: 20px;
-  }
-
-  .herolabel button {
-    font-size: 17px;
-  }
-}
-
-@media (max-width: 600px) {
-  .herolabel {
-    top: 10%;
-    left: 5%;
-    padding: 0.5rem;
-    max-width: 300px;
-  }
-
-  .herolabel h2 {
-    font-size: 20px;
-  }
-
-  .herolabel p {
-    font-size: 15px;
-  }
-
-  .herolabel button {
-    font-size: 13px;
-  }
-}
-
+/* Grid Layout */
 .reviews-upgrades {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 10px;
-  padding: 2rem;
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .upgrades {
-  padding: 20px;
+  padding: 1rem;
 }
 
 .upgrades h2 {
@@ -179,14 +200,16 @@ nav a:hover {
 
 .upgrades-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
 .upgrades-items {
   text-align: center;
   padding: 1rem;
-  margin-bottom: 1rem;
+  background: var(--clr-light1);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .upgrades-items img {
@@ -200,7 +223,7 @@ nav a:hover {
   font-weight: bold;
   text-decoration: none;
   margin-top: 0.5rem;
-  color: #0400ff;
+  color: var(--clr-medium2);
 }
 
 .reviews {
@@ -208,7 +231,8 @@ nav a:hover {
 }
 
 .reviews h3 {
-  font-size: 30px;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .reviews ul {
@@ -216,118 +240,68 @@ nav a:hover {
 }
 
 .reviews li {
-  font-size: 25px;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
-@media (max-width: 800px) {
-  .reviews-upgrades {
-    grid-template-columns: 1fr;
-  }
-}
-
-/** error.ejs **/
-
-.error-title {
-  font-family: Arial, sans-serif;
-  font-size: 40px;
-  text-align: center;
-}
-
-.error-view {
-  font-family: Arial, sans-serif;
-  font-size: 20px;
-  text-align: center;
-} 
-
-/** Classification **/
-
+/* Vehicle Display */
 #inv-display {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  text-align: center;
-  list-style: none;
-  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
   margin: 0 auto;
-}
-
-#inv-display hr {
-  border: none;
 }
 
 .inv-preview {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
+  background: var(--clr-light1);
+  border: 1px solid var(--clr-medium2);
+  border-radius: 8px;
+  padding: 1rem;
   text-align: center;
+  transition: transform 0.3s ease;
 }
 
-.inv-preview img {
-  width: 300px;
-  height: auto;
+.inv-preview:hover {
+  transform: translateY(-5px);
 }
 
-@media (max-width: 1000px) {
-  #inv-display {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    text-align: center;
-    justify-content: center;
-  }
+.namePrice {
+  margin-top: 1rem;
 }
 
-@media (max-width: 720px) {
-  #inv-display {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 10px;
-    text-align: center;
-    justify-content: center;
-  }
+.namePrice h2 {
+  font-size: 1.25rem;
 }
 
-/** Inventory **/
+.namePrice span {
+  font-weight: bold;
+  color: var(--clr-dark2);
+}
 
-.vehicle-section {
+/* Vehicle Detail Page */
+.vehicle-detail {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 2rem;
   padding: 1rem;
-}
-
-.vehicle-detail-section {
-  padding: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  color: #304146;
-}
-
-.vehicle-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: flex-start;
-  border: 2px solid lightgray;
+  border: 2px solid var(--clr-light3);
   border-radius: 8px;
-  padding: 15px;
 }
 
 .vehicle-img {
-  max-width: 400px;
-  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .vehicle-info {
-  flex: 2 1 500px;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 .vehicle-info h2 {
-  font-size: 30px;
-  color: black;
+  font-size: 1.75rem;
 }
 
 .vehicle-info p {
@@ -337,131 +311,223 @@ nav a:hover {
 }
 
 .vehicle-info p strong {
-  color: grey;
+  color: var(--clr-dark1);
 }
 
-@media (max-width: 720px) {
-  .vehicle-detail {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .vehicle-img {
-    max-width: 100%;
-    width: 100%;
-  }
-
-  .vehicle-info {
-    width: 100%;
-  }
-}
-
-.login, .register {
-  height: 100%;
+/* Forms */
+.login, 
+.register,
+.addClassification, 
+.addInventory {
   width: 100%;
-  padding: 100px;
-  font-family: Arial, sans-serif;
+  max-width: 600px;
+  padding: 2rem;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
-.login label, .register label {
+.form-container {
+  width: 95%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form {
+  background: var(--clr-light1);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form label {
   display: block;
+  margin-bottom: 0.5rem;
   font-weight: bold;
-  color: #333;
 }
 
-.login input, .register input {
+.form input,
+.form select,
+.form textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--clr-dark1);
   border-radius: 4px;
-  font-size: 15px;
-  box-sizing: border-box;
+  font-family: var(--font-paragraph);
 }
 
-.login button, .register button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  background-color: #4681f4;
+/* Buttons */
+button,
+.submitBtn,
+.login button, 
+.register button,
+.addClassification button, 
+.addInventory button {
+  background: var(--clr-button1);
   color: white;
-  border-radius: 5px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.login button:hover, .register button:hover {
-  background-color: #6c9dff;
-}
-
-.login p {
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
-
-#showPw {
-  border: 2px solid #000;
-  cursor: pointer;
-  color: blue;
-  padding: 5px;
-  border-radius: 3px;
-}
-
-.manageInventory h1 {
-  font-family: 'Oswald', sans-serif;
-  padding: 10px;
-}
-
-.manageInventory ul {
-  font-family: Arial, sans-serif;
-}
-
-.addClassification, .addInventory {
-  height: 100%;
-  width: 100%;
-  padding: 100px;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
-}
-
-.addClassification input, .addInventory input, .addInventory textarea, #classificationList {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-weight: bold;
   border-radius: 4px;
-  font-size: 15px;
-  box-sizing: border-box;
-}
-
-.addClassification button, .addInventory button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  background-color: #1056e2;
-  color: white;
-  border-radius: 5px;
-  font-size: 15px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5rem auto;
+  display: block;
+  font-family: var(--font-paragraph);
 }
 
+button:hover,
+.submitBtn:hover,
+.login button:hover, 
+.register button:hover,
+.addClassification button:hover, 
+.addInventory button:hover {
+  background: var(--clr-button2);
+}
+
+button:active,
+.submitBtn:active {
+  transform: translateY(2px);
+}
+
+/* Management View */
 .manageInventory {
-  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 2rem;
 }
 
 .manageInventory h1 {
-  font-size: 40px;
-  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .manageInventory ul {
-  list-style-type: none;
-  padding: 10px;
-  text-align: center;
+  padding: 0;
 }
 
 .manageInventory li {
-  font-size: 18px;
-  padding: 10px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.manageInventory a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--clr-medium2);
+  color: white;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.manageInventory a:hover {
+  background: var(--clr-dark2);
+}
+
+/* Error Page */
+.error {
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.error img {
+  max-width: 80%;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.error h2 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+  :root {
+    font-size: 18px;
+  }
+  
+  .siteName {
+    font-size: 2rem;
+  }
+  
+  #tools a {
+    font-size: 1.1rem;
+  }
+  
+  .herolabel {
+    top: 20%;
+    left: 10%;
+  }
+  
+  button,
+  .submitBtn,
+  .login button, 
+  .register button,
+  .addClassification button, 
+  .addInventory button {
+    width: auto;
+    display: inline-block;
+  }
+}
+
+@media (min-width: 992px) {
+  #wrapper {
+    width: 90%;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .reviews-upgrades {
+    grid-template-columns: 1fr;
+  }
+  
+  .vehicle-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  #wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+  }
+  
+  #top-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  #tools {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .herolabel {
+    position: static;
+    max-width: 100%;
+    margin-top: 1rem;
+    box-shadow: none;
+  }
+  
+  #inv-display {
+    grid-template-columns: 1fr;
+  }
+  
+  .upgrades-grid {
+    grid-template-columns: 1fr;
+  }
 }
