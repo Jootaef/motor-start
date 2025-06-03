@@ -1,44 +1,38 @@
-﻿// Needed Resources
+// Needed Resources 
 const express = require("express")
-const router = new express.Router()
-const controller = require("../controllers/invController")
-const validator = require("../utilities/inventory-validation");
-const utilities = require("../utilities");
+const router = new express.Router() 
+const invController = require("../controllers/invController")
+const invValidate = require("../utilities/inventory-validation")
 
+// Route to build inventory by classification view
+router.get("/type/:classificationId", invController.buildByClassificationId)
 
-router.get("/", utilities.canAdminister, controller.buildManagement);
-router.get("/type/:classificationId", controller.buildByClassificationId);
-router.get("/detail/:id", controller.buildByInventoryId);
+// Route for viewing vehicles by inventory id
+router.get("/detail/:invId", invController.buildDetailView)
 
-router.get("/classification", utilities.canAdminister, controller.buildNewClassification);
-router.post('/classification',
-    utilities.canAdminister,
-    validator.classificationRules(),
-    validator.classificationDataCheck,
-    utilities.handleErrors(controller.addClassification)
+// Route to build the inventory management view
+router.get("/", invController.buildManagementView)
+
+// Route to deliver add classification form
+router.get("/add-classification", invController.buildAddClassification)
+
+// Proccess the add classification data
+router.post(
+  "/add-classification",
+  invValidate.classificationRules(),
+  invValidate.checkClassificationData,
+  invController.addClassification
 )
 
-router.get("/vehicle", utilities.canAdminister, controller.buildNewVehicle);
-router.post('/vehicle',
-    utilities.canAdminister,
-    validator.vehicleRules(),
-    validator.vehicleDataCheck,
-    utilities.handleErrors(controller.addVehicle)
+// Route to deliver add inventory form
+router.get("/add-inventory", invController.buildAddInventory)
+
+// Proccess the add inventory data
+router.post(
+  "/add-inventory",
+  invValidate.inventoryRules(),
+  invValidate.checkInventoryData,
+  invController.addInventory
 )
 
-router.get("/getInventory/:classificationId", utilities.handleErrors(controller.getInventoryJson))
-
-router.get("/edit/:vehicleId", utilities.canAdminister, utilities.handleErrors(controller.buildEditVehicle))
-router.post("/update",
-    utilities.canAdminister,
-    validator.vehicleRules(),
-    validator.updateVehicleDataCheck,
-    utilities.handleErrors(controller.updateVehicle)
-)
-
-router.get('/delete/:vehicleId', utilities.canAdminister, utilities.handleErrors(controller.buildDeleteVehicle))
-router.post("/delete", utilities.canAdminister, utilities.handleErrors(controller.deleteVehicle))
-
-router.get("/server-error", controller.buildServerError);
-
-module.exports = router;
+module.exports = router

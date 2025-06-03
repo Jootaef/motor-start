@@ -1,8 +1,7 @@
-﻿<!--show the title if exists, otherwise redirect back to the homepage-->
-<% if (title) { %>
-    <h1><%= title %></h1>
-<% } else {
-    res.redirect('/')
-} %>
+<h1 class="error-title"><%= title %></h1>
 
-<%- message %>
+<div class="error-view">
+    <p>Whelp, sorry that you got brought here...</p>
+    <p>Something went wrong while transporting you...</p>
+    <p><a href="/">Return Home Safely</a></p>
+</div>

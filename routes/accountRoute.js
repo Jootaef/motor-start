@@ -1,37 +1,22 @@
-﻿const express = require('express')
+// Needed Resources
+const express = require("express")
 const router = new express.Router()
-const controller = require('../controllers/accountController')
-const utilities = require('../utilities')
-const validator = require('../utilities/account-validation')
+const utilities = require("../utilities/")
+const accountController = require("../controllers/accountController")
+const regValidate = require('../utilities/account-validation')
 
-router.get('/', utilities.checkLogin, utilities.handleErrors(controller.buildAccountManagement))
+// Login route
+router.get("/login", utilities.handleErrors(accountController.buildLogin))
 
-router.get('/register', utilities.handleErrors(controller.buildRegister))
-router.post('/register',
-    validator.registrationRules(),
-    validator.registrationDataCheck,
-    utilities.handleErrors(controller.register)
-)
+// Registration route (GET)
+router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
-router.get('/login', utilities.handleErrors(controller.buildLogin))
-router.post('/login',
-    validator.loginRules(),
-    validator.loginDataCheck,
-    utilities.handleErrors(controller.accountLogin)
-)
-
-router.get('/logout', utilities.handleErrors(controller.accountLogout))
-
-router.get('/update/:accountId', utilities.handleErrors(controller.buildUpdateAccount))
-router.post('/update',
-    validator.updateAccountRules(),
-    validator.updateAccountDataCheck,
-    utilities.handleErrors(controller.updateAccount)
-)
-router.post('/update/password',
-    validator.updatePasswordRules(),
-    validator.updatePasswordDataCheck,
-    utilities.handleErrors(controller.changePassword)
+// Process the registration data
+router.post(
+    "/register",
+    regValidate.registrationRules(),
+    regValidate.checkRegData,
+    utilities.handleErrors(accountController.registerAccount)
 )
 
 module.exports = router

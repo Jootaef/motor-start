@@ -5,18 +5,18 @@
 /* ***********************
  * Require Statements
  *************************/
-const express = require('express')
-const expressLayouts = require('express-ejs-layouts')
-const env = require('dotenv').config()
+const express = require("express")
+const expressLayouts = require("express-ejs-layouts")
+const env = require("dotenv").config()
 const app = express()
-const staticFiles = require('./routes/static')
+const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/")
 const session = require("express-session")
 const pool = require('./database/')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
+const accountRoute = require('./routes/accountRoute')
+const bodyParser = require("body-parser")
 
 /* ***********************
  * Middleware
@@ -32,34 +32,44 @@ app.use(session({
   name: 'sessionId',
 }))
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cookieParser())
-app.use(utilities.checkJwtToken)
-
-/* ***********************
- * View Engine and Templates
- *************************/
-app.set('view engine', 'ejs')
-app.use(expressLayouts)
-app.set('layout', './layouts/layout') // not at views root
 
 /* ***********************
  * Routes
  *************************/
-app.use(staticFiles)
-// Index route
-app.get('/', utilities.handleErrors(baseController.buildHome))
-// Inventory routes
-app.use("/inv", utilities.handleErrors(inventoryRoute))
-// Account routes
-app.use("/account", require("./routes/accountRoute"))
+app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout")
+
+/* ***********************
+ * Routes
+ *************************/
+app.use(express.static('public'));
+app.use(static)
+
+// Index Route
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
+// Inventory Route
+app.use("/inv", inventoryRoute)
+
+// Account Route
+app.use('/account', accountRoute)
+
+// Trigger 500 Error Route
+app.get('/error', (req, res, next) => {
+  const err = new Error('Testing for Error Status 500')
+  err.status = 500
+  next(err)
+});
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
@@ -72,17 +82,12 @@ app.use(async (req, res, next) => {
 *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.status}: ${err.message}`)
-  if (err.status === 404) {
-    message = err.message
-  } else if (err.status === 403) {
-    message = 'Access denied'
-  } else {
-    message = 'Something went wrong! Please try again. If the problem persists, contact me on the corner, near the flagpole, for your beating.'
-  }
-  res.render("errors/error", {
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  let message
+  if (err.status == 404) { message = err.message } else { message = 'Oh no! There was a crash. Maybe try a different route?' }
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || 'Server Error',
-    message: message,
+    message,
     nav
   })
 })
@@ -91,8 +96,8 @@ app.use(async (err, req, res, next) => {
  * Local Server Information
  * Values from .env (environment) file
  *************************/
-const port = process.env.PORT
-const host = process.env.HOST
+const port = process.env.PORT || 5500
+const host = process.env.HOST || 'localhost'
 
 /* ***********************
  * Log statement to confirm server operation

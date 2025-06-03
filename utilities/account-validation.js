@@ -1,201 +1,73 @@
-﻿const utilities = require('.')
-const {body, validationResult} = require('express-validator')
-const validator = {}
-const accountModel = require('../models/account-model')
-const req = require("express/lib/request");
+const utilities = require(".")
+const { body, validationResult } = require("express-validator")
 
-validator.registrationRules = () => {
+const validate = {}
+
+/*  **********************************
+  *  Registration Data Validation Rules
+  * ********************************* */
+validate.registrationRules = () => {
     return [
-        body('firstName')
-            .trim()
-            .isString()
-            .isLength({min: 1})
-            .withMessage('Please provide a first name'),
-        body('lastName')
-            .trim()
-            .isString()
-            .isLength({min: 1})
-            .withMessage('Please provide a last name'),
-        body('email')
-            .trim()
-            .isEmail()
-            .normalizeEmail()
-            .withMessage('Please provide a valid email address')
-            .custom(async (email) => {
-                const emailExists = await accountModel.checkExistingEmail(email)
-                if (emailExists) {
-                    throw new Error('Email address already exists. Please log in or register with a different email address')
-                }
-            }),
-        body('password')
-            .trim()
-            .isStrongPassword({
-                minLength: 12,
-                minLowercase: 1,
-                minUppercase: 1,
-                minNumber: 1,
-                minSymbols: 1
-            })
-            .withMessage('Please provide a valid password that meets the specified requirements'),
+      // firstname is required and must be string
+      body("account_firstname")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 1 })
+        .withMessage("Please provide a first name."), // on error this message is sent.
+  
+      // lastname is required and must be string
+      body("account_lastname")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 2 })
+        .withMessage("Please provide a last name."), // on error this message is sent.
+  
+      // valid email is required and cannot already exist in the DB
+      body("account_email")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .normalizeEmail() // refer to validator.js docs
+      .withMessage("A valid email is required."),
+  
+      // password is required and must be strong password
+      body("account_password")
+        .trim()
+        .notEmpty()
+        .isStrongPassword({
+          minLength: 12,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
+        .withMessage("Password does not meet requirements."),
     ]
-}
+  }
 
-validator.registrationDataCheck = async (req, res, next) => {
-    const {
-        firstName,
-        lastName,
-        email,
-    } = req.body
-
+  /* ******************************
+ * Check data and return errors or continue to registration
+ * ***************************** */
+validate.checkRegData = async (req, res, next) => {
+    const { account_firstname, account_lastname, account_email } = req.body
     let errors = []
     errors = validationResult(req)
-
     if (!errors.isEmpty()) {
-        let nav = await utilities.getNav()
-        res.render('account/register', {
-            errors,
-            title: 'Register',
-            nav,
-            firstName,
-            lastName,
-            email,
-        })
-        return
+      let nav = await utilities.getNav()
+      res.render("account/register", {
+        errors,
+        title: "Registration",
+        nav,
+        account_firstname,
+        account_lastname,
+        account_email,
+      })
+      return
     }
     next()
-}
-
-validator.loginRules = () => {
-    return [
-        body('email')
-            .trim()
-            .isEmail()
-            .normalizeEmail()
-            .withMessage('Please provide a valid email address'),
-        body('password')
-            .trim()
-            .isLength({min: 1})
-            .withMessage('Please provide a password'),
-    ]
-}
-
-validator.loginDataCheck = async (req, res, next) => {
-    const {
-        email,
-        password,
-    } = req.body
-
-    let errors = []
-    errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-        let nav = await utilities.getNav()
-        res.render('account/login', {
-            errors,
-            title: 'Login',
-            nav,
-            email,
-            password,
-        })
-        return
-    }
-    next()
-}
-
-validator.updateAccountRules = () => {
-    return [
-        body('updateId')
-            .notEmpty().withMessage('Account id is required'),
-        body('firstName')
-            .trim()
-            .isString()
-            .isLength({min: 1})
-            .withMessage('Please provide a first name'),
-        body('lastName')
-            .trim()
-            .isString()
-            .isLength({min: 1})
-            .withMessage('Please provide a last name'),
-        body('email')
-            .trim()
-            .isEmail()
-            .normalizeEmail()
-            .withMessage('Please provide a valid email address')
-            .custom(async (email, {req}) => {
-                const accountId = parseInt(req.body.updateId)
-                const emailExists = await accountModel.checkExistingEmailWithAccount(accountId, email)
-                if (emailExists) {
-                    throw new Error('Email address already exists. Please use a different email address')
-                }
-            }),
-    ]
-}
-
-validator.updateAccountDataCheck = async (req, res, next) => {
-    const {
-        updateId,
-        firstName,
-        lastName,
-        email,
-    } = req.body
-
-    let errors = []
-    errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-        let nav = await utilities.getNav()
-        res.render(`account/update`, {
-            errors,
-            title: `Update ${firstName} ${lastName}`,
-            nav,
-            id: updateId,
-            firstName,
-            lastName,
-            email,
-        })
-        return
-    }
-    next()
-}
-
-validator.updatePasswordRules = () => {
-    return [
-        body('password')
-            .trim()
-            .isStrongPassword({
-                minLength: 12,
-                minLowercase: 1,
-                minUppercase: 1,
-                minNumber: 1,
-                minSymbols: 1
-            })
-            .withMessage('Please provide a valid password that meets the specified requirements'),
-    ]
-}
-
-validator.updatePasswordDataCheck = async (req, res, next) => {
-    const {
-        passwordId
-    } = req.body
-
-    let errors = []
-    errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-        let nav = await utilities.getNav()
-        const account = await accountModel.getAccountById(passwordId)
-        res.render('account/update', {
-            errors,
-            title: `Update ${account.account_firstname} ${account.account_lastname}`,
-            nav,
-            id: passwordId,
-            firstName: account.account_firstname,
-            lastName: account.account_lastname,
-            email: account.account_email,
-        })
-        return
-    }
-    next()
-}
-
-module.exports = validator
+  }
+  
+module.exports = validate
